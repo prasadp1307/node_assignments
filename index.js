@@ -17,28 +17,23 @@
 const http = require('http');
 
 const express = require('express');
+const  bodyparser = require('body-parser')
 
 const app = express();
+app.use(bodyparser.urlencoded({extended: false}));
 
-app.use((req,res,next) => {
-    console.log('This is first middleware!')
-    // res.send("hello from express!")
-    next();
-});
-
-app.use((req,res,next) =>{
-    console.log("this is second middleware!");
-    res.send('<h1>Hello to node.js!</h1>');
-    
+app.use('/add-product',(req,res,next) =>{
+    res.send('<form action="/product" method="POST"><input type="text" name="tittle"><button type="submit">Add Product</form>');  
 })
 
-app.use((req,res,next) =>{
-    console.log("this is third middleware!");
-       res.send({key1 : value})
-   
+app.use('/product',(req,res,next) => {
+    console.log(req.body);
+    res.redirect('/');
 })
 
-
+app.use('/',(req,res,next) =>{
+   res.send('<h1>Welcome to Homapage!</h1>');  
+})
 
 const server = http.createServer(app);
 
