@@ -22,9 +22,17 @@ const  bodyparser = require('body-parser')
 const app = express();
 app.use(bodyparser.urlencoded({extended: false}));
 
-app.use('/add-product',(req,res,next) =>{
-    res.send('<form action="/product" method="POST"><input type="text" name="tittle"><button type="submit">Add Product</form>');  
-})
+app.use('/add-product', (req, res, next) => {
+    res.send(`
+        <form action="/product" method="POST">
+            <input type="text" name="title" placeholder="Product Title"><br><br>
+            <input type="text" name="size" placeholder="Product Size"><br><br>
+            <button type="submit">Add Product</button>
+        </form>
+    `);
+});
+
+
 
 app.use('/product',(req,res,next) => {
     console.log(req.body);
