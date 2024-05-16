@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>add-product</title>
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+            font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+        }
+        main{
+          padding: 1rem;  
+        }
+        .main-header {
+            width: 100%;
+            height: 3.5rem;
+            background-color: rgb(241, 167, 69);
+            padding: 0 1.5rem;
+        }
+        .product-form{
+            width:30rem;
+            max-width: 90%;
+            margin: auto;
+        }
+
+        .main-header__nav {
+            height: 100%;
+            display: flex;
+            align-items: center;
+        }
+
+        .main-header__itemList {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+
+        .main-header__item {
+            margin: 0 1rem;
+        }
+
+        .main-header__item a {
+            text-decoration: none;
+            color: white;
+            font-size: large;
+            font-style:initial;
+        }
+
+        .main-header__item a:hover,
+        .main-header__item a:active {
+            color: rgb(157, 13, 194);
+        }
+        
+        .form-control{
+            margin-bottom: 1rem;
+        }
+
+        .form-control-input,
+        .form-control-label {
+                display: block;
+        }
+        .form-control-input{
+            border: 1px solid #dbc442;
+            font: inherit;
+            border-radius: 2px;
+            
+
+        }
+        button{
+            font: inherit;
+            border: 1px solid #c713db;
+            background: white;
+            color: #c713db;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        button:hover,
+        button:active{
+            background-color: #c713db;
+            color: aliceblue;
+        }
+    </style>
+</head>
+<body>
+    <header class="main-header">
+        <nav class="main-header__nav">
+            <ul class="main-header__itemList">
+                <li class="main-header__item"><a href="/">Shop</a></li>
+                <li class="main-header__item"><a class="active">Add Product</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <form class="product-form" action="/admin/add-product" method="POST">
+           <div class="form-control">
+            <label form="tittle" class="form-control-label">Tittle</label>
+            <!-- <input type="text" name="'title" id="title"> -->
+           </div>
+            <input type="text" name="tittle" class="form-control-input">
+            <button type="submit">Add Product</button>
+    </main>
+</body>
+</html>
