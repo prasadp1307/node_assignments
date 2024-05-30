@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <link rel="stylesheet" href="./style.css"> -->
+    <title>Expense Tracker</title>
+</head>
+<body>
+    <form onsubmit="addExpense(event)">
+        <div class="Tracker">
+            <div>
+                <h1>Expense Tracker</h1>
+                <br>
+                <h3>Add Expense Amount</h3>
+                <input type="number" id="expenseAmount" name="price" placeholder="&#8377" required>
+            </div>
+            <br><br>
+            <div>
+                <h3>Add Expense Description</h3>
+                <input type="text" id="expenseDescription" name="descr" required>
+            </div>
+            <br><br>
+            <div>
+                <h3 class="ccate">Choose Category</h3>
+                <select name="category" id="category" required>
+                    <option value=""></option>
+                    <option value="Fuel">Fuel</option>
+                    <option value="Food">Food</option>
+                    <option value="Rent">Rent</option>
+                    <option value="Other">Other</option>
+                    <option value="Clothing">Clothing</option>
+                    <option value="Entertainment">Entertainment</option>
+                </select>
+            </div>
+            <br><br>
+            <div>
+                <button type="submit" id="add">&#8377; ADD EXPENSE</button>
+            </div>
+            <ul id="expenseList"></ul>
+            <div id="footer" class="footer">&copy; 2024 Expense Tracker. All rights reserved.</div>
+        </div>
+    </form>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.2/axios.min.js"></script>
+    <script>
+        window.addEventListener("DOMContentLoaded", async () => {
+            try {
+                const response = await axios.get("http://localhost:3000/user/get-expenses");
+                const expenseList = response.data.expenseList;
+                expenseList.forEach(expense => showItemOnScreen(expense));
+            } catch (err) {
+                console.error(err);
+            }
+        });
+
+        async function addExpense(event) {
+            event.preventDefault();
+            try {
+                const price = document.getElementById('expenseAmount').value;
+                const descr = document.getElementById('expenseDescription').value;
+                const category = document.getElementById('category').value;
+
+                const obj = { price, descr, category };
+                const response = await axios.post("http://localhost:3000/user/add-expense", obj);
+                const newExpense = response.data.newExpense;
+
+                showItemOnScreen(newExpense);
+                document.getElementById('expenseAmount').value = '';
+                document.getElementById('expenseDescription').value = '';
+                document.getElementById('category').value = '';
+            } catch (err) {
+                document.body.innerHTML += '<h4 id="box">Something went wrong</h4>';
+                setTimeout(() => {
+                    const box = document.getElementById('box');
+                    if (box) {
+                        box.style.display = 'none';
+                    }
+                }, 2000);
+                console.error(err);
+            }
+        }
+
+        function showItemOnScreen(obj) {
+            const expenseList = document.getElementById('expenseList');
+            expenseList.innerHTML += `
+                <li id='${obj.id}'>
+                    Item: ${obj.descr} -- Category: ${obj.category} -- Price: ${obj.price} 
+                    -- <button onclick="editExpense('${obj.id}','${obj.descr}','${obj.category}','${obj.price}')">Edit</button>
+                    <button onclick="deleteExpense('${obj.id}')">Delete</button>
+                </li>`;
+        }
+
+        async function deleteExpense(id) {
+            try {
+                await axios.delete(`http://localhost:3000/user/delete-expense/${id}`);
+                deleteFromScreen(id);
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        function deleteFromScreen(id) {
+            const expenseList = document.getElementById('expenseList');
+            const item = document.getElementById(id);
+            if (item) {
+                expenseList.removeChild(item);
+            }
+        }
+
+        function editExpense(id, descr, category, price) {
+            document.getElementById('expenseAmount').value = price;
+            document.getElementById('expenseDescription').value = descr;
+            document.getElementById('category').value = category;
+            deleteExpense(id);
+        }
+    </script>
+</body>
+</html>
